@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Headers/Graphics.h"
+
 // Constants
 const unsigned int WINDOW_WIDTH  = 800;
 const unsigned int WINDOW_HEIGHT = 600;
@@ -89,29 +91,24 @@ int main()
   glClearColor(red, green, blue, alpha);
 
   // VAO, VBO, and EBO
-  GLuint VAO;
-  GLuint VBO;
-  GLuint EBO;
+  VAO VAO1;
+  VBO VBO1;
+  EBO EBO1;
 
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
-  glGenBuffers(1, &EBO);
+  dp_initVAO(&VAO1);
+  dp_initVBO(&VBO1, vertices, sizeof(vertices));
+  dp_initEBO(&EBO1, indices, sizeof(indices));
 
-  glBindVertexArray(VAO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+  dp_bindVAO(&VAO1);
+  dp_bindVBO(&VBO1);
+  dp_bindEBO(&EBO1);
 
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  dp_linkAttrib(&VBO1, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
+  dp_linkAttrib(&VBO1, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
-  glEnableVertexAttribArray(1);
-
-  glBindVertexArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+  dp_unbindVAO();
+  dp_unbindVBO();
+  dp_unbindEBO();
 
   // Info Log
   int success;
@@ -173,15 +170,15 @@ int main()
     glfwPollEvents();
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
+    dp_bindVAO(&VAO1);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     glfwSwapBuffers(window);
   }
 
   // Terminating the Program
-  glDeleteVertexArrays(1, &VAO);
-  glDeleteBuffers(1, &VBO);
-  glDeleteBuffers(1, &EBO);
+  dp_deleteVAO(&VAO1);
+  dp_deleteVBO(&VBO1);
+  dp_deleteEBO(&EBO1);
   glDeleteProgram(shaderProgram);
   glfwDestroyWindow(window);
   glfwTerminate();
