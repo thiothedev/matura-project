@@ -16,7 +16,7 @@ find_package(glfw3 REQUIRED)
 # Executable
 add_executable(
   ${PROJECT_NAME}
-  src/Main.c  
+  src/Main.c
 )
 target_include_directories(${PROJECT_NAME} PUBLIC src)
 target_link_libraries(${PROJECT_NAME} PUBLIC GL GLEW glfw)
