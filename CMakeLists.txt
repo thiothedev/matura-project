@@ -16,6 +16,7 @@ find_package(glfw3 REQUIRED)
 # Globs
 file(GLOB HEADERS_FILES src/Headers/*.h)
 file(GLOB SOURCES_FILES src/Sources/*.c)
+file(GLOB UTILS_FILES src/Utils/*.c src/Utils/*.h)
 
 # Executable
 add_executable(
@@ -23,6 +24,7 @@ add_executable(
   src/Main.c
   ${HEADERS_FILES}
   ${SOURCES_FILES}
+  ${UTILS_FILES}
 )
 target_include_directories(${PROJECT_NAME} PUBLIC src)
 target_link_libraries(${PROJECT_NAME} PUBLIC GL GLEW glfw)

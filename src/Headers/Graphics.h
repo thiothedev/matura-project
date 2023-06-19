@@ -3,6 +3,8 @@
 
 #include <GL/glew.h>
 
+#include "../Utils/File.h"
+
 typedef struct VAO
 {
   GLuint ID;
@@ -33,5 +35,14 @@ void dp_initEBO(EBO* EBO, GLuint indices[], GLsizeiptr size);
 void dp_bindEBO(EBO* EBO);
 void dp_unbindEBO();
 void dp_deleteEBO(EBO* EBO);
+
+typedef struct Shader
+{
+  GLuint ID;
+} Shader;
+
+void dp_initShader(Shader* Shader, const char* vertexSource, const char* fragmentSource);
+void dp_useShader(Shader* Shader);
+void dp_deleteShader(Shader* Shader);
 
 #endif // GRAPHICS_H

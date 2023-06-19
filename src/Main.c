@@ -25,26 +25,6 @@ GLuint indices[] = {
   3, 4, 5,
 };
 
-// Shader Source Codes
-const char* vertexShaderSource =
-  "#version 330 core\n"
-  "layout (location = 0) in vec3 aPos;\n"
-  "layout (location = 1) in vec3 aCol;\n"
-  "out vec3 vertCol;\n"
-  "void main()\n"
-  "{\n"
-  "  gl_Position = vec4(aPos, 1.f);\n"
-  "  vertCol = aCol;\n"
-  "}\0";
-const char* fragmentShaderSource =
-  "#version 330 core\n"
-  "in vec3 vertCol;\n"
-  "out vec4 FragColor;\n"
-  "void main()\n"
-  "{\n"
-  "  FragColor = vec4(vertCol, 1.f);\n"
-  "}\0";
-
 // Callbacks
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
@@ -110,56 +90,9 @@ int main()
   dp_unbindVBO();
   dp_unbindEBO();
 
-  // Info Log
-  int success;
-  char infoLog[512];
-
   // Shaders
-  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-
-  glCompileShader(vertexShader);
-  glCompileShader(fragmentShader);
-
-  // Validating Vertex Shader
-  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-    printf("Failed to compile the vertex shader!\n");
-    printf("Error: %s\n", infoLog);
-  }
-
-  // Validating Fragment Shader
-  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
-    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-    printf("Failed to compile the fragment shader!\n");
-    printf("Error: %s\n", infoLog);
-  }
-
-  // Shader Program
-  GLuint shaderProgram = glCreateProgram();
-  glAttachShader(shaderProgram, vertexShader);
-  glAttachShader(shaderProgram, fragmentShader);
-  glLinkProgram(shaderProgram);
-
-  // Validating Shader Program
-  glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-  if (!success)
-  {
-    glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-    printf("Failed to link the shader program!\n");
-    printf("Error: %s\n", infoLog);
-  }
-
-  // Deleting the Shaders
-  glDeleteShader(vertexShader);
-  glDeleteShader(fragmentShader);
+  Shader defaultShader;
+  dp_initShader(&defaultShader, "src/Shaders/default.vert", "src/Shaders/default.frag");
 
   // Callbacks
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
@@ -169,7 +102,7 @@ int main()
   {
     glfwPollEvents();
     glClear(GL_COLOR_BUFFER_BIT);
-    glUseProgram(shaderProgram);
+    dp_useShader(&defaultShader);
     dp_bindVAO(&VAO1);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     glfwSwapBuffers(window);
@@ -179,7 +112,7 @@ int main()
   dp_deleteVAO(&VAO1);
   dp_deleteVBO(&VBO1);
   dp_deleteEBO(&EBO1);
-  glDeleteProgram(shaderProgram);
+  dp_deleteShader(&defaultShader);
   glfwDestroyWindow(window);
   glfwTerminate();
   return EXIT_SUCCESS;

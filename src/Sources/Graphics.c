@@ -71,3 +71,70 @@ void dp_deleteEBO(EBO* EBO)
 {
   glDeleteBuffers(1, &EBO->ID);
 }
+
+void dp_initShader(Shader* Shader, const char* vertexSource, const char* fragmentSource)
+{
+  // Info Log
+  int success;
+  char infoLog[512];
+
+  // Shaders
+  GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+  GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+  const char* vertexShaderSource = dp_file_getContents(vertexSource);
+  const char* fragmentShaderSource = dp_file_getContents(fragmentSource);
+
+  glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+  glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+
+  glCompileShader(vertexShader);
+  glCompileShader(fragmentShader);
+
+  // Validating Vertex Shader
+  glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+  if (!success)
+  {
+    glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+    printf("Failed to compile the vertex shader!\n");
+    printf("Error: %s\n", infoLog);
+  }
+
+  // Validating Fragment Shader
+  glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+  if (!success)
+  {
+    glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+    printf("Failed to compile the fragment shader!\n");
+    printf("Error: %s\n", infoLog);
+  }
+
+  // Shader Program
+  Shader->ID = glCreateProgram();
+  glAttachShader(Shader->ID, vertexShader);
+  glAttachShader(Shader->ID, fragmentShader);
+  glLinkProgram(Shader->ID);
+
+  // Validating Shader Program
+  glGetProgramiv(Shader->ID, GL_LINK_STATUS, &success);
+  if (!success)
+  {
+    glGetProgramInfoLog(Shader->ID, 512, NULL, infoLog);
+    printf("Failed to link the shader program!\n");
+    printf("Error: %s\n", infoLog);
+  }
+
+  // Deleting the Shaders
+  glDeleteShader(vertexShader);
+  glDeleteShader(fragmentShader);
+}
+
+void dp_useShader(Shader* Shader)
+{
+  glUseProgram(Shader->ID);
+}
+
+void dp_deleteShader(Shader* Shader)
+{
+  glDeleteProgram(Shader->ID);
+}
