@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Headers/Game.h"
 #include "Headers/Graphics.h"
 
 // Constants
@@ -30,38 +31,10 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 int main()
 {
-  // Initializing GLFW
-  glfwInit();
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  // Creating the Window
-  GLFWwindow* window = glfwCreateWindow(
-    WINDOW_WIDTH,
-    WINDOW_HEIGHT,
-    WINDOW_TITLE,
-    NULL,
-    NULL
-  );
-  if (window == NULL)
-  {
-    printf("Failed to create a GLFW window!\n");
-    glfwTerminate();
-    return EXIT_FAILURE;
-  }
-  glfwMakeContextCurrent(window);
-
-  // Initializing GLEW
-  GLenum err = glewInit();
-  if (GLEW_OK != err)
-  {
-    printf("Failed to initialize GLEW!\n");
-    printf("Error: %s\n", glewGetErrorString(err));
-    glfwTerminate();
-    return EXIT_FAILURE;
-  }
-  printf("GLEW: %s\n", glewGetString(GLEW_VERSION));
+  // Initializing
+  dp_initializeGlfw();
+  GLFWwindow* window = dp_initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+  dp_initializeGlew();
 
   // Clear Color
   GLclampf red   = 0.0f;
