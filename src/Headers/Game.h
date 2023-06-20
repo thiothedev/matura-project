@@ -30,4 +30,11 @@ bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const un
  */
 bool dp_initializeGlew();
 
+/**
+ * Handles inputs for the specified GLFW window.
+ *
+ * @param window The GLFW window for which the inputs need to be handled.
+ */
+void dp_handleInputs(GLFWwindow* window);
+
 #endif // GAME_H

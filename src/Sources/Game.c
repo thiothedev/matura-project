@@ -48,3 +48,11 @@ bool dp_initializeGlew()
   printf("GLEW: %s\n", glewGetString(GLEW_VERSION));
   return true;
 }
+
+void dp_handleInputs(GLFWwindow* window)
+{
+  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+  {
+    printf("E is pressed!\n");
+  }
+}

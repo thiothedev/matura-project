@@ -98,11 +98,13 @@ int main()
     glfwPollEvents();
     glClear(GL_COLOR_BUFFER_BIT);
 
-    glm_perspective(glm_rad(CAMERA_FOV), (float)WINDOW_WIDTH / WINDOW_HEIGHT, CAMERA_NEAR, CAMERA_FAR, projection);
+    dp_handleInputs(window);
 
     GLuint modelLoc = glGetUniformLocation(defaultShader.ID, "model");
     GLuint viewLoc = glGetUniformLocation(defaultShader.ID, "view");
     GLuint projectionLoc = glGetUniformLocation(defaultShader.ID, "projection");
+
+    glm_perspective(glm_rad(CAMERA_FOV), (float)WINDOW_WIDTH / WINDOW_HEIGHT, CAMERA_NEAR, CAMERA_FAR, projection);
 
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)model);
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)view);
