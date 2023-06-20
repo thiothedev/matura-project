@@ -7,11 +7,13 @@
 #include "Headers/Graphics.h"
 
 // Constants
+
 const unsigned int WINDOW_WIDTH  = 800;
 const unsigned int WINDOW_HEIGHT = 600;
 const char*        WINDOW_TITLE  = "GLFW";
 
 // Vertices and Indices
+
 GLfloat vertices[] = {
   -0.5f,  -0.5f, 0.f, 1.f, 0.f, 0.f,
    0.0f,  -0.5f, 0.f, 0.f, 1.f, 0.f,
@@ -27,23 +29,23 @@ GLuint indices[] = {
 };
 
 // Callbacks
+
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 int main()
 {
+  // Window
+
+  GLFWwindow* window = NULL;
+
   // Initializing
+
   dp_initializeGlfw();
-  GLFWwindow* window = dp_initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
+  dp_initializeWindow(&window, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
   dp_initializeGlew();
 
-  // Clear Color
-  GLclampf red   = 0.0f;
-  GLclampf green = 0.3f;
-  GLclampf blue  = 0.3f;
-  GLclampf alpha = 1.0f;
-  glClearColor(red, green, blue, alpha);
-
   // VAO, VBO, and EBO
+
   VAO VAO1;
   VBO VBO1;
   EBO EBO1;
@@ -64,13 +66,16 @@ int main()
   dp_unbindEBO();
 
   // Shaders
+
   Shader defaultShader;
   dp_initShader(&defaultShader, "src/Shaders/default.vert", "src/Shaders/default.frag");
 
   // Callbacks
+
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
   // Main Loop
+
   while (!glfwWindowShouldClose(window))
   {
     glfwPollEvents();
@@ -82,16 +87,19 @@ int main()
   }
 
   // Terminating the Program
+
   dp_deleteVAO(&VAO1);
   dp_deleteVBO(&VBO1);
   dp_deleteEBO(&EBO1);
   dp_deleteShader(&defaultShader);
   glfwDestroyWindow(window);
   glfwTerminate();
+
   return EXIT_SUCCESS;
 }
 
 // Callbacks
+
 void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 {
   glViewport(0, 0, width, height);

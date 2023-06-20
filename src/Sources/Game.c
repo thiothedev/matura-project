@@ -8,23 +8,31 @@ bool dp_initializeGlfw()
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  
 }
 
-GLFWwindow* dp_initializeWindow(const unsigned int width, const unsigned int height, const char* title)
+bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const unsigned int height, const char* title)
 {
-   GLFWwindow* window = glfwCreateWindow(
+  *window = glfwCreateWindow(
     width,
     height,
     title,
     NULL,
     NULL
   );
-  if (window == NULL)
+  if (*window == NULL)
   {
     printf("Failed to create a GLFW window!\n");
     glfwTerminate();
-    return NULL;
+    return false;
   }
-  glfwMakeContextCurrent(window);
-  return window;
+  glfwMakeContextCurrent(*window);
+
+  // Clear Color
+  GLclampf red   = 0.0f;
+  GLclampf green = 0.3f;
+  GLclampf blue  = 0.3f;
+  GLclampf alpha = 1.0f;
+  glClearColor(red, green, blue, alpha);
+
+  return true;
 }
 
 bool dp_initializeGlew()

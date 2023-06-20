@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION 3.3)
 set(PROJECT_NAME "matura")
 set(OpenGL_GL_PREFERENCE LEGACY)
 
+# Options
+option(CGLM_USE_C99 "" OFF)
+
 # Project Name
 project(${PROJECT_NAME})
 
