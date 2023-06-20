@@ -91,6 +91,10 @@ int main()
   vec3 translation = { 0.f, 0.f, -5.f };
   glm_translate(model, translation);
 
+  // Delta Time
+  float deltaTime = 0.f;
+  float previousTime = 0.f;
+
   // Main Loop
 
   while (!glfwWindowShouldClose(window))
@@ -98,6 +102,7 @@ int main()
     glfwPollEvents();
     glClear(GL_COLOR_BUFFER_BIT);
 
+    dt_updateDeltaTime(&deltaTime, &previousTime);
     dp_handleInputs(window);
 
     GLuint modelLoc = glGetUniformLocation(defaultShader.ID, "model");

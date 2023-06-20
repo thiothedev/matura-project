@@ -49,10 +49,14 @@ bool dp_initializeGlew()
   return true;
 }
 
+void dt_updateDeltaTime(float* deltaTime, float* previousTime)
+{
+  float currentTime = (float)glfwGetTime();
+  *deltaTime = currentTime - *previousTime;
+  *previousTime = currentTime;
+}
+
 void dp_handleInputs(GLFWwindow* window)
 {
-  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-  {
-    printf("E is pressed!\n");
-  }
+  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS);
 }

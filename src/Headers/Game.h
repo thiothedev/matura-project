@@ -31,6 +31,13 @@ bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const un
 bool dp_initializeGlew();
 
 /**
+ * Updates the delta time and previous time values for time-based calculations.
+ *
+ * @param deltaTime    The time elapsed since the last frame, in seconds.
+ * @param previousTime The previous time value for time-based calculations, in seconds.
+ */
+void dt_updateDeltaTime(float* deltaTime, float* previousTime);
+/**
  * Handles inputs for the specified GLFW window.
  *
  * @param window The GLFW window for which the inputs need to be handled.
