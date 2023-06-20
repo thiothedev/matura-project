@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cglm/cglm.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -11,6 +12,9 @@
 const unsigned int WINDOW_WIDTH  = 800;
 const unsigned int WINDOW_HEIGHT = 600;
 const char*        WINDOW_TITLE  = "GLFW";
+const float        CAMERA_FOV    = 45.f;
+const float        CAMERA_NEAR   = 0.1f;
+const float        CAMERA_FAR    = 100.f;
 
 // Vertices and Indices
 
@@ -73,6 +77,19 @@ int main()
   // Callbacks
 
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+  
+  // Matrices
+
+  mat4 model;
+  mat4 view;
+  mat4 projection;
+
+  glm_mat4_identity(model);
+  glm_mat4_identity(view);
+  glm_mat4_identity(projection);
+
+  vec3 translation = { 0.f, 0.f, -5.f };
+  glm_translate(model, translation);
 
   // Main Loop
 
@@ -80,6 +97,17 @@ int main()
   {
     glfwPollEvents();
     glClear(GL_COLOR_BUFFER_BIT);
+
+    glm_perspective(glm_rad(CAMERA_FOV), (float)WINDOW_WIDTH / WINDOW_HEIGHT, CAMERA_NEAR, CAMERA_FAR, projection);
+
+    GLuint modelLoc = glGetUniformLocation(defaultShader.ID, "model");
+    GLuint viewLoc = glGetUniformLocation(defaultShader.ID, "view");
+    GLuint projectionLoc = glGetUniformLocation(defaultShader.ID, "projection");
+
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)model);
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)view);
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, (GLfloat*)projection);
+
     dp_useShader(&defaultShader);
     dp_bindVAO(&VAO1);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
