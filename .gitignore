@@ -1,0 +1,10 @@
+build/
+
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode
