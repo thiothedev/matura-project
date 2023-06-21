@@ -1,5 +1,8 @@
 #include "../Headers/Game.h"
 
+extern const float CAMERA_SPEED;
+extern vec3 position;
+
 bool dp_initializeGlfw()
 {
   glfwInit();
@@ -56,7 +59,30 @@ void dt_updateDeltaTime(float* deltaTime, float* previousTime)
   *previousTime = currentTime;
 }
 
-void dp_handleInputs(GLFWwindow* window)
+void dp_handleInputs(GLFWwindow* window, float deltaTime)
 {
-  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS);
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+  {
+    glm_vec3_add(position, (vec3){ 0.f, 0.f, 1.f * deltaTime * CAMERA_SPEED }, position);
+  }
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+  {
+    glm_vec3_add(position, (vec3){ 1.f * deltaTime * CAMERA_SPEED, 0.f, 0.f }, position);
+  }
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+  {
+    glm_vec3_add(position, (vec3){ 0.f, 0.f, -1.f * deltaTime * CAMERA_SPEED }, position);
+  }
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+  {
+    glm_vec3_add(position, (vec3){ -1.f * deltaTime * CAMERA_SPEED, 0.f, 0.f }, position);
+  }
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+  {
+    glm_vec3_add(position, (vec3){ 0.f, -1.f * deltaTime * CAMERA_SPEED, 0.f }, position);
+  }
+  if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+  {
+    glm_vec3_add(position, (vec3){ 0.f, 1.f * deltaTime * CAMERA_SPEED, 0.f }, position);
+  }
 }

@@ -4,7 +4,7 @@
 
 ```
 ./build.sh
-./build/matrua
+./build/matura
 ```
 
 ## Dependencies

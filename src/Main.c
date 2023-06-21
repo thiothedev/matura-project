@@ -15,6 +15,7 @@ const char*        WINDOW_TITLE  = "GLFW";
 const float        CAMERA_FOV    = 45.f;
 const float        CAMERA_NEAR   = 0.1f;
 const float        CAMERA_FAR    = 100.f;
+const float        CAMERA_SPEED  = 2.f;
 
 // Vertices and Indices
 
@@ -35,6 +36,10 @@ GLuint indices[] = {
 // Callbacks
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+
+// Position
+
+vec3 position = { 0.f, 0.f, -1.f };
 
 int main()
 {
@@ -84,13 +89,6 @@ int main()
   mat4 view;
   mat4 projection;
 
-  glm_mat4_identity(model);
-  glm_mat4_identity(view);
-  glm_mat4_identity(projection);
-
-  vec3 translation = { 0.f, 0.f, -5.f };
-  glm_translate(model, translation);
-
   // Delta Time
   float deltaTime = 0.f;
   float previousTime = 0.f;
@@ -103,13 +101,18 @@ int main()
     glClear(GL_COLOR_BUFFER_BIT);
 
     dt_updateDeltaTime(&deltaTime, &previousTime);
-    dp_handleInputs(window);
+    dp_handleInputs(window, deltaTime);
 
     GLuint modelLoc = glGetUniformLocation(defaultShader.ID, "model");
     GLuint viewLoc = glGetUniformLocation(defaultShader.ID, "view");
     GLuint projectionLoc = glGetUniformLocation(defaultShader.ID, "projection");
 
+    glm_mat4_identity(model);
+    glm_mat4_identity(view);
+    glm_mat4_identity(projection);
+
     glm_perspective(glm_rad(CAMERA_FOV), (float)WINDOW_WIDTH / WINDOW_HEIGHT, CAMERA_NEAR, CAMERA_FAR, projection);
+    glm_translate(model, position);
 
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)model);
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)view);

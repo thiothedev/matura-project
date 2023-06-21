@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <cglm/cglm.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -38,10 +39,11 @@ bool dp_initializeGlew();
  */
 void dt_updateDeltaTime(float* deltaTime, float* previousTime);
 /**
- * Handles inputs for the specified GLFW window.
+ * Handles inputs for the specified GLFW window with delta time support.
  *
- * @param window The GLFW window for which the inputs need to be handled.
+ * @param window     The GLFW window for which the inputs need to be handled.
+ * @param deltaTime  The time elapsed since the last frame, in seconds.
  */
-void dp_handleInputs(GLFWwindow* window);
+void dp_handleInputs(GLFWwindow* window, float deltaTime);
 
 #endif // GAME_H
