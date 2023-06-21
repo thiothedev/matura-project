@@ -19,18 +19,60 @@ const float        CAMERA_SPEED  = 2.f;
 
 // Vertices and Indices
 
+// 6 7 8 
+// 3 4 5
+// 0 1 2
+
+// 11 12
+// 9  10
+
 GLfloat vertices[] = {
-  -0.5f,  -0.5f, 0.f, 1.f, 0.f, 0.f,
-   0.0f,  -0.5f, 0.f, 0.f, 1.f, 0.f,
-   0.5f,  -0.5f, 0.f, 0.f, 0.f, 1.f,
-  -0.25f,  0.0f, 0.f, 1.f, 1.f, 0.f,
-   0.25f,  0.0f, 0.f, 0.f, 1.f, 1.f,
-   0.0f,   0.5f, 0.f, 1.f, 0.f, 1.f,
+  -0.5f,  -0.5f,  0.5f,  1.f, 0.f, 0.f,
+   0.0f,  -0.5f,  0.5f,  0.f, 1.f, 0.f,
+   0.5f,  -0.5f,  0.5f,  0.f, 0.f, 1.f,
+  -0.5f,  -0.5f,  0.0f,  1.f, 1.f, 0.f,
+   0.0f,  -0.5f,  0.0f,  0.f, 1.f, 1.f,
+   0.5f,  -0.5f,  0.0f,  1.f, 0.f, 1.f,
+  -0.5f,  -0.5f, -0.5f,  1.f, 0.f, 0.f,
+   0.0f,  -0.5f, -0.5f,  0.f, 1.f, 0.f,
+   0.5f,  -0.5f, -0.5f,  0.f, 0.f, 1.f,
+  -0.25f,  0.0f,  0.25f, 1.f, 1.f, 0.f,
+   0.25f,  0.0f,  0.25f, 0.f, 1.f, 1.f,
+  -0.25f,  0.0f, -0.25f, 1.f, 0.f, 1.f,
+   0.25f,  0.0f, -0.25f, 1.f, 0.f, 0.f,
+   0.0f,   0.5f,  0.0f,  0.f, 1.f, 0.f,
 };
 GLuint indices[] = {
-  0, 1, 3,
-  1, 2, 4,
-  3, 4, 5,
+  0, 1, 4,    // Front Left - BT
+  4, 3, 0,    // Front Left - BT
+  0, 1, 9,    // Front Left - F
+  4, 3, 9,    // Front Left - B,
+  3, 0, 9,    // Front Left - L,
+  1, 4, 9,    // Front Left - R,
+  1, 2, 5,    // Front Right - BT
+  5, 4, 1,    // Front Right - BT
+  1, 2, 10,   // Front Right - F
+  5, 4, 10,   // Front Right - B
+  4, 1, 10,   // Front Right - L,
+  2, 5, 10,   // Front Right - R,
+  3, 4, 7,    // Back Left - BT
+  7, 6, 3,    // Back Left - BT
+  3, 4, 11,   // Back Left - F
+  7, 6, 11,   // Back Left - B
+  6, 3, 11,   // Back Left - L,
+  4, 7, 11,   // Back Left - R,
+  4, 5, 8,    // Back Right - BT
+  8, 7, 4,    // Back Right - BT
+  4, 5, 12,   // Back Right - F
+  8, 7, 12,   // Back Right - B
+  7, 4, 12,   // Back Right - L,
+  5, 8, 12,   // Back Right - R,
+  9, 10, 12,  // Top - BT
+  12, 11, 9,  // Top - BT
+  9, 10, 13,  // Top - F
+  12, 11, 13, // Top - B
+  11, 9, 13,  // Top - L
+  10, 12, 13, // Top - R
 };
 
 // Callbacks
@@ -82,6 +124,10 @@ int main()
   // Callbacks
 
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+
+  // Tests
+
+  glEnable(GL_DEPTH_TEST);
   
   // Matrices
 
@@ -98,7 +144,7 @@ int main()
   while (!glfwWindowShouldClose(window))
   {
     glfwPollEvents();
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     dt_updateDeltaTime(&deltaTime, &previousTime);
     dp_handleInputs(window, deltaTime);
