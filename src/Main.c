@@ -13,29 +13,24 @@
 const unsigned int WINDOW_WIDTH       = 800;
 const unsigned int WINDOW_HEIGHT      = 600;
 const char*        WINDOW_TITLE       = "GLFW";
-const float        CAMERA_FOV         = 40.f;
-const float        CAMERA_NEAR        = 0.1f;
-const float        CAMERA_FAR         = 100.f;
-const float        CAMERA_SPEED       = 2.f;
-const float        CAMERA_SENSITIVITY = 3.f;
 
 // Vertices and Indices
 
 GLfloat vertices[] = {
   -0.5f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
-   0.0f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
+   0.0f,  -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,
    0.5f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
-  -0.5f,  -0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
+  -0.5f,  -0.5f,  0.0f,  0.1f, 0.1f, 0.1f,
    0.0f,  -0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
-   0.5f,  -0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
+   0.5f,  -0.5f,  0.0f,  0.1f, 0.1f, 0.1f,
   -0.5f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
-   0.0f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
+   0.0f,  -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,
    0.5f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
-  -0.25f,  0.0f,  0.25f, 0.2f, 0.2f, 0.2f,
+  -0.25f,  0.0f,  0.25f, 0.1f, 0.1f, 0.1f,
    0.25f,  0.0f,  0.25f, 0.2f, 0.2f, 0.2f,
-  -0.25f,  0.0f, -0.25f, 0.2f, 0.2f, 0.2f,
+  -0.25f,  0.0f, -0.25f, 0.1f, 0.1f, 0.1f,
    0.25f,  0.0f, -0.25f, 0.2f, 0.2f, 0.2f,
-   0.0f,   0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
+   0.0f,   0.5f,  0.0f,  0.1f, 0.1f, 0.1f,
 };
 GLuint indices[] = {
   0, 1, 4,    // Front Left - BT
@@ -82,6 +77,12 @@ Camera mainCamera = {
   .up = (vec3){ 0.f, 1.f, 0.f },
   .yaw = 90.f,
   .pitch = 0.f,
+  .fov = 70.f,
+  .aspect = (float)WINDOW_WIDTH / WINDOW_HEIGHT,
+  .near = 0.1f,
+  .far = 100.f,
+  .speed = 2.f,
+  .sensitivity = 3.f,
 };
 
 int main()
@@ -142,12 +143,8 @@ int main()
   bool cameraLocked = false;
 
   // First Frame Update
-  vec3 front;
-  front[0] = cos(glm_rad(mainCamera.yaw)) * cos(glm_rad(mainCamera.pitch));
-  front[1] = sin(glm_rad(mainCamera.pitch));
-  front[2] = sin(glm_rad(mainCamera.yaw)) * cos(glm_rad(mainCamera.pitch));
-  glm_vec3_copy(front, mainCamera.front);
-  glm_vec3_normalize(mainCamera.front);
+
+  dp_updateFront(&mainCamera);
 
   // Main Loop
 
@@ -155,35 +152,12 @@ int main()
   {
     glfwPollEvents();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    dp_useShader(&defaultShader);
 
     dt_updateDeltaTime(&deltaTime, &previousTime);
     dp_handleInputs(window, deltaTime, &cameraLocked);
+    dp_updateMatrices(&mainCamera, &defaultShader);
 
-    GLuint modelLoc = glGetUniformLocation(defaultShader.ID, "model");
-    GLuint viewLoc = glGetUniformLocation(defaultShader.ID, "view");
-    GLuint projectionLoc = glGetUniformLocation(defaultShader.ID, "projection");
-
-    // Matrices
-
-    mat4 model;
-    mat4 view;
-    mat4 projection;
-
-    glm_mat4_identity(model);
-    glm_mat4_identity(view);
-    glm_mat4_identity(projection);
-
-    vec3 aaa;
-    glm_vec3_add(mainCamera.position, mainCamera.front, aaa);
-
-    glm_perspective(glm_rad(CAMERA_FOV), (float)WINDOW_WIDTH / WINDOW_HEIGHT, CAMERA_NEAR, CAMERA_FAR, projection);
-    glm_lookat(mainCamera.position, aaa, mainCamera.up, view);
-
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)model);
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)view);
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, (GLfloat*)projection);
-
-    dp_useShader(&defaultShader);
     dp_bindVAO(&VAO1);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     glfwSwapBuffers(window);

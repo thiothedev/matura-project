@@ -2,8 +2,6 @@
 
 extern const unsigned int WINDOW_WIDTH;
 extern const unsigned int WINDOW_HEIGHT;
-extern const float        CAMERA_SPEED;
-extern const float        CAMERA_SENSITIVITY;
 
 extern Camera mainCamera;
 
@@ -108,7 +106,7 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
   {
     vec3 finalVector;
-    glm_vec3_scale(mainCamera.front, CAMERA_SPEED * deltaTime, finalVector);
+    glm_vec3_scale(mainCamera.front, mainCamera.speed * deltaTime, finalVector);
     glm_vec3_add(mainCamera.position, finalVector, mainCamera.position);
   }
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -117,14 +115,14 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
   
     glm_vec3_cross(mainCamera.front, mainCamera.up, finalVector);
     glm_vec3_normalize(finalVector);
-    glm_vec3_scale(finalVector, CAMERA_SPEED * deltaTime, finalVector);
+    glm_vec3_scale(finalVector, mainCamera.speed * deltaTime, finalVector);
 
     glm_vec3_sub(mainCamera.position, finalVector, mainCamera.position);
   }
   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
   {
-     vec3 finalVector;
-    glm_vec3_scale(mainCamera.front, CAMERA_SPEED * deltaTime, finalVector);
+    vec3 finalVector;
+    glm_vec3_scale(mainCamera.front, mainCamera.speed * deltaTime, finalVector);
     glm_vec3_sub(mainCamera.position, finalVector, mainCamera.position);
   }
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
@@ -133,17 +131,17 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
   
     glm_vec3_cross(mainCamera.front, mainCamera.up, finalVector);
     glm_vec3_normalize(finalVector);
-    glm_vec3_scale(finalVector, CAMERA_SPEED * deltaTime, finalVector);
+    glm_vec3_scale(finalVector, mainCamera.speed * deltaTime, finalVector);
   
     glm_vec3_add(mainCamera.position, finalVector, mainCamera.position);
   }
   if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
   {
-    glm_vec3_add(mainCamera.position, (vec3){ 0.f, 1.f * deltaTime * CAMERA_SPEED, 0.f }, mainCamera.position);
+    glm_vec3_add(mainCamera.position, (vec3){ 0.f, 1.f * deltaTime * mainCamera.speed, 0.f }, mainCamera.position);
   }
   if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
   {
-    glm_vec3_add(mainCamera.position, (vec3){ 0.f, -1.f * deltaTime * CAMERA_SPEED, 0.f }, mainCamera.position);
+    glm_vec3_add(mainCamera.position, (vec3){ 0.f, -1.f * deltaTime * mainCamera.speed, 0.f }, mainCamera.position);
   }
 
   // Mouse Movement
@@ -157,18 +155,12 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
   float deltaX = (float)mouseX - ((float)WINDOW_WIDTH / 2);
   float deltaY = ((float)WINDOW_HEIGHT / 2) - (float)mouseY;
 
-  mainCamera.yaw += deltaX * CAMERA_SENSITIVITY * deltaTime;
-  mainCamera.pitch += deltaY * CAMERA_SENSITIVITY * deltaTime;
+  mainCamera.yaw += deltaX * mainCamera.sensitivity * deltaTime;
+  mainCamera.pitch += deltaY * mainCamera.sensitivity * deltaTime;
 
   if (mainCamera.pitch > 89.f) mainCamera.pitch = 89.f;
   if (mainCamera.pitch < -89.f) mainCamera.pitch = -89.f;
 
-  vec3 front;
-  front[0] = cos(glm_rad(mainCamera.yaw)) * cos(glm_rad(mainCamera.pitch));
-  front[1] = sin(glm_rad(mainCamera.pitch));
-  front[2] = sin(glm_rad(mainCamera.yaw)) * cos(glm_rad(mainCamera.pitch));
-  glm_vec3_copy(front, mainCamera.front);
-  glm_vec3_normalize(mainCamera.front);
-
+  dp_updateFront(&mainCamera);
   glfwSetCursorPos(window, (double)WINDOW_WIDTH / 2, (double)WINDOW_HEIGHT / 2);
 }
