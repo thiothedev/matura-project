@@ -6,6 +6,7 @@
 
 #include "Headers/Game.h"
 #include "Headers/Graphics.h"
+#include "Headers/Camera.h"
 
 // Constants
 
@@ -73,13 +74,15 @@ GLuint indices[] = {
 
 void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
-// Position
+// Camera
 
-vec3 cameraPosition = { 0.f, 0.f, -3.f };
-vec3 cameraFront = { 0.f, 0.f, -1.f };
-vec3 cameraUp = { 0.f, 1.f, 0.f };
-float pitch = 0.f;
-float yaw = 90.f;
+Camera mainCamera = {
+  .position = (vec3){ 0.f, 0.f, -3.f },
+  .front = (vec3){ 0.f, 0.f, -1.f },
+  .up = (vec3){ 0.f, 1.f, 0.f },
+  .yaw = 90.f,
+  .pitch = 0.f,
+};
 
 int main()
 {
@@ -140,11 +143,11 @@ int main()
 
   // First Frame Update
   vec3 front;
-  front[0] = cos(glm_rad(yaw)) * cos(glm_rad(pitch));
-  front[1] = sin(glm_rad(pitch));
-  front[2] = sin(glm_rad(yaw)) * cos(glm_rad(pitch));
-  glm_vec3_copy(front, cameraFront);
-  glm_vec3_normalize(cameraFront);
+  front[0] = cos(glm_rad(mainCamera.yaw)) * cos(glm_rad(mainCamera.pitch));
+  front[1] = sin(glm_rad(mainCamera.pitch));
+  front[2] = sin(glm_rad(mainCamera.yaw)) * cos(glm_rad(mainCamera.pitch));
+  glm_vec3_copy(front, mainCamera.front);
+  glm_vec3_normalize(mainCamera.front);
 
   // Main Loop
 
@@ -171,10 +174,10 @@ int main()
     glm_mat4_identity(projection);
 
     vec3 aaa;
-    glm_vec3_add(cameraPosition, cameraFront, aaa);
+    glm_vec3_add(mainCamera.position, mainCamera.front, aaa);
 
     glm_perspective(glm_rad(CAMERA_FOV), (float)WINDOW_WIDTH / WINDOW_HEIGHT, CAMERA_NEAR, CAMERA_FAR, projection);
-    glm_lookat(cameraPosition, aaa, cameraUp, view);
+    glm_lookat(mainCamera.position, aaa, mainCamera.up, view);
 
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)model);
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, (GLfloat*)view);

@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "Camera.h"
+
 /**
  * Initializes GLFW library.
  *
