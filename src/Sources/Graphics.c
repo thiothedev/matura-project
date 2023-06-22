@@ -138,3 +138,50 @@ void dp_deleteShader(Shader* Shader)
 {
   glDeleteProgram(Shader->ID);
 }
+
+void dp_initTexture(Texture* texture, const char* path, GLenum texType, GLenum slot, GLenum format, GLenum pixelType)
+{
+  texture->type = texType;
+
+  int width;
+  int height;
+  char* data;
+  dp_image_loadFromPng(path, &data, &width, &height);
+
+  glGenTextures(1, &texture->ID);
+  glActiveTexture(slot);
+	glBindTexture(texType, texture->ID);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+  glTexImage2D(texType, 0, GL_RGBA, width, height, 0, format, pixelType, data);
+	glGenerateMipmap(texType);
+
+  free(data);
+  glBindTexture(texType, 0);
+}
+
+void dp_textureUnit(Shader* shader, const char* uniform, GLuint unit)
+{
+  GLuint textureLoc = glGetUniformLocation(shader->ID, uniform);
+  dp_useShader(shader);
+  glUniform1i(textureLoc, unit);
+}
+
+void dp_bindTexture(Texture* texture)
+{
+  glBindTexture(texture->type, texture->ID);
+}
+
+void dp_unbindTexture(Texture* texture)
+{
+  glBindTexture(texture->type, 0);
+}
+
+void dp_deleteTexture(Texture* texture)
+{
+  glDeleteTextures(1, &texture->ID);
+}

@@ -142,22 +142,9 @@ int main()
   dp_updateFront(&mainCamera);
 
   // Textures
-
-  int width;
-  int height;
-  char* data;
-  dp_image_loadFromPng("assets/Textures/grass.png", &data, &width, &height);
-
-  GLuint grassTexture;
-  glGenTextures(1, &grassTexture);
-  glBindTexture(GL_TEXTURE_2D, grassTexture);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-  glGenerateMipmap(GL_TEXTURE_2D);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-
-  free(data);
+  
+  Texture grassTexture;
+  dp_initTexture(&grassTexture, "assets/Textures/grass.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 
   // Main Loop
 
@@ -172,7 +159,7 @@ int main()
     dp_updateMatrices(&mainCamera, &defaultShader);
 
     dp_bindVAO(&VAO1);
-    glBindTexture(GL_TEXTURE_2D, grassTexture);
+    dp_bindTexture(&grassTexture);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     glfwSwapBuffers(window);
   }
@@ -183,6 +170,7 @@ int main()
   dp_deleteVBO(&VBO1);
   dp_deleteEBO(&EBO1);
   dp_deleteShader(&defaultShader);
+  dp_deleteTexture(&grassTexture);
   glfwDestroyWindow(window);
   glfwTerminate();
 

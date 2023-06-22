@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 
 #include "../Utils/File.h"
+#include "../Utils/Image.h"
 
 /**
  * Represents a Vertex Array Object
@@ -62,7 +63,6 @@ void dp_unbindVAO();
  * @param VAO The VAO object to be deleted.
  */
 void dp_deleteVAO(VAO* VAO);
-
 
 /**
  * Initializes a Vertex Buffer Object (VBO) with the provided vertices and size.
@@ -140,5 +140,52 @@ void dp_useShader(Shader* Shader);
  * @param shader The Shader object to be deleted.
  */
 void dp_deleteShader(Shader* Shader);
+
+/**
+ * Represents a texture object in OpenGL.
+ */
+typedef struct Texture
+{
+  GLuint ID;
+  GLenum type;
+} Texture;
+
+/**
+ * Initializes a texture object with the specified parameters.
+ * 
+ * @param texture Pointer to the Texture struct to be initialized.
+ * @param path Path to the image file to be used as the texture.
+ * @param texType Type of the texture (e.g., GL_TEXTURE_2D, GL_TEXTURE_CUBE_MAP, etc.).
+ * @param slot Texture slot or unit to bind the texture to.
+ * @param format Format of the texture data (e.g., GL_RGBA, GL_RGB, etc.).
+ * @param pixelType Type of the pixel data (e.g., GL_UNSIGNED_BYTE, GL_FLOAT, etc.).
+ */
+void dp_initTexture(Texture* texture, const char* path, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
+/**
+* Sets the texture unit of a shader uniform variable to the specified texture unit.
+*
+* @param shader Pointer to the Shader struct representing the shader program.
+* @param uniform Name of the uniform variable in the shader.
+* @param unit Texture unit to be bound to the uniform variable.
+*/
+void dp_textureUnit(Shader* shader, const char* uniform, GLuint unit);
+/**
+ * Binds a texture object for rendering.
+ *
+ * @param texture Pointer to the Texture struct representing the texture object.
+ */
+void dp_bindTexture(Texture* texture);
+/**
+ * Unbinds a texture object.
+ *
+ * @param texture Pointer to the Texture struct representing the texture object.
+ */
+void dp_unbindTexture(Texture* texture);
+/**
+ * Deletes a texture object and frees any associated resources.
+ *
+ * @param texture Pointer to the Texture struct representing the texture object.
+ */
+void dp_deleteTexture(Texture* texture);
 
 #endif // GRAPHICS_H
