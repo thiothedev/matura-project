@@ -19,13 +19,6 @@ const float        CAMERA_SPEED  = 2.f;
 
 // Vertices and Indices
 
-// 6 7 8 
-// 3 4 5
-// 0 1 2
-
-// 11 12
-// 9  10
-
 GLfloat vertices[] = {
   -0.5f,  -0.5f,  0.5f,  1.f, 0.f, 0.f,
    0.0f,  -0.5f,  0.5f,  0.f, 1.f, 0.f,
@@ -136,8 +129,13 @@ int main()
   mat4 projection;
 
   // Delta Time
+
   float deltaTime = 0.f;
   float previousTime = 0.f;
+
+  // Camera
+
+  bool cameraLocked = false;
 
   // Main Loop
 
@@ -147,7 +145,7 @@ int main()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     dt_updateDeltaTime(&deltaTime, &previousTime);
-    dp_handleInputs(window, deltaTime);
+    dp_handleInputs(window, deltaTime, &cameraLocked);
 
     GLuint modelLoc = glGetUniformLocation(defaultShader.ID, "model");
     GLuint viewLoc = glGetUniformLocation(defaultShader.ID, "view");

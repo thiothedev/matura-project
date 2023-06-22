@@ -59,8 +59,42 @@ void dt_updateDeltaTime(float* deltaTime, float* previousTime)
   *previousTime = currentTime;
 }
 
-void dp_handleInputs(GLFWwindow* window, float deltaTime)
+void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
 {
+  // Locking the Camera
+
+  if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+  {
+    *cameraLocked = true;
+  }
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+  {
+    *cameraLocked = false;
+  }
+
+  if (!*cameraLocked) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    return;
+  }
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+  // Polygon Modes
+
+  if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+  {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+  }
+  if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+  {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  }
+  if (glfwGetKey(window, GLFW_KEY_M) == GLFW_PRESS)
+  {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  }
+
+  // Movement
+
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
   {
     glm_vec3_add(position, (vec3){ 0.f, 0.f, 1.f * deltaTime * CAMERA_SPEED }, position);

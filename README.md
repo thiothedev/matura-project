@@ -13,3 +13,10 @@
 - GLEW
 - GLFW
 - CGLM
+
+## Controls
+
+- WASD: Movement
+- B - Vertex Mode
+- N - Line Mode
+- M - Fill Mode

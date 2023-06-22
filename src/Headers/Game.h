@@ -44,6 +44,6 @@ void dt_updateDeltaTime(float* deltaTime, float* previousTime);
  * @param window     The GLFW window for which the inputs need to be handled.
  * @param deltaTime  The time elapsed since the last frame, in seconds.
  */
-void dp_handleInputs(GLFWwindow* window, float deltaTime);
+void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked);
 
 #endif // GAME_H
