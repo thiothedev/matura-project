@@ -4,7 +4,12 @@ extern const unsigned int WINDOW_WIDTH;
 extern const unsigned int WINDOW_HEIGHT;
 extern const float        CAMERA_SPEED;
 extern const float        CAMERA_SENSITIVITY;
-extern vec3               position;
+
+extern float pitch;
+extern float yaw;
+extern vec3  cameraPosition;
+extern vec3  cameraFront;
+extern vec3  cameraUp;
 
 bool dp_initializeGlfw()
 {
@@ -74,18 +79,20 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
   if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
   {
     *cameraLocked = true;
+    glfwSetCursorPos(window, (double)WINDOW_WIDTH / 2, (double)WINDOW_HEIGHT / 2);
+    return;
   }
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
   {
     *cameraLocked = false;
   }
 
+  // Updating the Cursor
+
   if (!*cameraLocked) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     return;
   }
-  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-  glfwSetCursorPos(window, (double)WINDOW_WIDTH / 2, (double)WINDOW_HEIGHT / 2);
 
   // Polygon Modes
 
@@ -104,26 +111,68 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
 
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
   {
-    glm_vec3_add(position, (vec3){ 0.f, 0.f, 1.f * deltaTime * CAMERA_SPEED }, position);
+    vec3 finalVector;
+    glm_vec3_scale(cameraFront, CAMERA_SPEED * deltaTime, finalVector);
+    glm_vec3_add(cameraPosition, finalVector, cameraPosition);
   }
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
   {
-    glm_vec3_add(position, (vec3){ 1.f * deltaTime * CAMERA_SPEED, 0.f, 0.f }, position);
+    vec3 finalVector;
+  
+    glm_vec3_cross(cameraFront, cameraUp, finalVector);
+    glm_vec3_normalize(finalVector);
+    glm_vec3_scale(finalVector, CAMERA_SPEED * deltaTime, finalVector);
+
+    glm_vec3_sub(cameraPosition, finalVector, cameraPosition);
   }
   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
   {
-    glm_vec3_add(position, (vec3){ 0.f, 0.f, -1.f * deltaTime * CAMERA_SPEED }, position);
+     vec3 finalVector;
+    glm_vec3_scale(cameraFront, CAMERA_SPEED * deltaTime, finalVector);
+    glm_vec3_sub(cameraPosition, finalVector, cameraPosition);
   }
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
   {
-    glm_vec3_add(position, (vec3){ -1.f * deltaTime * CAMERA_SPEED, 0.f, 0.f }, position);
+    vec3 finalVector;
+  
+    glm_vec3_cross(cameraFront, cameraUp, finalVector);
+    glm_vec3_normalize(finalVector);
+    glm_vec3_scale(finalVector, CAMERA_SPEED * deltaTime, finalVector);
+  
+    glm_vec3_add(cameraPosition, finalVector, cameraPosition);
   }
   if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
   {
-    glm_vec3_add(position, (vec3){ 0.f, -1.f * deltaTime * CAMERA_SPEED, 0.f }, position);
+    glm_vec3_add(cameraPosition, (vec3){ 0.f, 1.f * deltaTime * CAMERA_SPEED, 0.f }, cameraPosition);
   }
   if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
   {
-    glm_vec3_add(position, (vec3){ 0.f, 1.f * deltaTime * CAMERA_SPEED, 0.f }, position);
+    glm_vec3_add(cameraPosition, (vec3){ 0.f, -1.f * deltaTime * CAMERA_SPEED, 0.f }, cameraPosition);
   }
+
+  // Mouse Movement
+
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+  double mouseX;
+  double mouseY;
+  glfwGetCursorPos(window, &mouseX, &mouseY);
+
+  float deltaX = (float)mouseX - ((float)WINDOW_WIDTH / 2);
+  float deltaY = ((float)WINDOW_HEIGHT / 2) - (float)mouseY;
+
+  yaw += deltaX * CAMERA_SENSITIVITY * deltaTime;
+  pitch += deltaY * CAMERA_SENSITIVITY * deltaTime;
+
+  if (pitch > 89.f) pitch = 89.f;
+  if (pitch < -89.f) pitch = -89.f;
+
+  vec3 front;
+  front[0] = cos(glm_rad(yaw)) * cos(glm_rad(pitch));
+  front[1] = sin(glm_rad(pitch));
+  front[2] = sin(glm_rad(yaw)) * cos(glm_rad(pitch));
+  glm_vec3_copy(front, cameraFront);
+  glm_vec3_normalize(cameraFront);
+
+  glfwSetCursorPos(window, (double)WINDOW_WIDTH / 2, (double)WINDOW_HEIGHT / 2);
 }

@@ -39,10 +39,11 @@ bool dp_initializeGlew();
  */
 void dt_updateDeltaTime(float* deltaTime, float* previousTime);
 /**
- * Handles inputs for the specified GLFW window with delta time support.
+ * Handles inputs for the specified GLFW window with delta time support and camera locking.
  *
- * @param window     The GLFW window for which the inputs need to be handled.
- * @param deltaTime  The time elapsed since the last frame, in seconds.
+ * @param window        The GLFW window for which the inputs need to be handled.
+ * @param deltaTime     The time elapsed since the last frame, in seconds.
+ * @param cameraLocked  A pointer to a boolean value indicating whether the camera is locked.
  */
 void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked);
 
