@@ -8,6 +8,8 @@
 #include "Headers/Graphics.h"
 #include "Headers/Camera.h"
 
+#include "Utils/Image.h"
+
 // Constants
 
 const unsigned int WINDOW_WIDTH       = 800;
@@ -17,52 +19,44 @@ const char*        WINDOW_TITLE       = "GLFW";
 // Vertices and Indices
 
 GLfloat vertices[] = {
-  -0.5f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
-   0.0f,  -0.5f,  0.5f,  0.1f, 0.1f, 0.1f,
-   0.5f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
-  -0.5f,  -0.5f,  0.0f,  0.1f, 0.1f, 0.1f,
-   0.0f,  -0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
-   0.5f,  -0.5f,  0.0f,  0.1f, 0.1f, 0.1f,
-  -0.5f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
-   0.0f,  -0.5f, -0.5f,  0.1f, 0.1f, 0.1f,
-   0.5f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
-  -0.25f,  0.0f,  0.25f, 0.1f, 0.1f, 0.1f,
-   0.25f,  0.0f,  0.25f, 0.2f, 0.2f, 0.2f,
-  -0.25f,  0.0f, -0.25f, 0.1f, 0.1f, 0.1f,
-   0.25f,  0.0f, -0.25f, 0.2f, 0.2f, 0.2f,
-   0.0f,   0.5f,  0.0f,  0.1f, 0.1f, 0.1f,
+  -0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
+   0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
+  -0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
+   0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
+   0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
+   0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
+   0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
+   0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
+   0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
+  -0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
+   0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
+  -0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
+  -0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
+  -0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
+  -0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
+  -0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
+  -0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
+   0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
+  -0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
+   0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
+   0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
+  -0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
+   0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
+  -0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
 };
 GLuint indices[] = {
-  0, 1, 4,    // Front Left - BT
-  4, 3, 0,    // Front Left - BT
-  0, 1, 9,    // Front Left - F
-  4, 3, 9,    // Front Left - B,
-  3, 0, 9,    // Front Left - L,
-  1, 4, 9,    // Front Left - R,
-  1, 2, 5,    // Front Right - BT
-  5, 4, 1,    // Front Right - BT
-  1, 2, 10,   // Front Right - F
-  5, 4, 10,   // Front Right - B
-  4, 1, 10,   // Front Right - L,
-  2, 5, 10,   // Front Right - R,
-  3, 4, 7,    // Back Left - BT
-  7, 6, 3,    // Back Left - BT
-  3, 4, 11,   // Back Left - F
-  7, 6, 11,   // Back Left - B
-  6, 3, 11,   // Back Left - L,
-  4, 7, 11,   // Back Left - R,
-  4, 5, 8,    // Back Right - BT
-  8, 7, 4,    // Back Right - BT
-  4, 5, 12,   // Back Right - F
-  8, 7, 12,   // Back Right - B
-  7, 4, 12,   // Back Right - L,
-  5, 8, 12,   // Back Right - R,
-  9, 10, 12,  // Top - BT
-  12, 11, 9,  // Top - BT
-  9, 10, 13,  // Top - F
-  12, 11, 13, // Top - B
-  11, 9, 13,  // Top - L
-  10, 12, 13, // Top - R
+  0, 1, 3,     // Front
+  3, 2, 0,     // Front
+  4, 5, 7,     // Right
+  7, 6, 4,     // Right
+  8, 9, 11,    // Back
+  11, 10, 8,   // Back
+  12, 13, 15,  // Left
+  15, 14, 12,  // Left
+  16, 17, 19,  // Top
+  19, 18, 16,  // Top
+  20, 21, 23,  // Bottom
+  23, 22, 20,  // Bottom
 };
 
 // Callbacks
@@ -72,10 +66,10 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 // Camera
 
 Camera mainCamera = {
-  .position = (vec3){ 0.f, 0.f, -3.f },
+  .position = (vec3){ 0.f, 0.f, 3.f },
   .front = (vec3){ 0.f, 0.f, -1.f },
   .up = (vec3){ 0.f, 1.f, 0.f },
-  .yaw = 90.f,
+  .yaw = 270.f,
   .pitch = 0.f,
   .fov = 70.f,
   .aspect = (float)WINDOW_WIDTH / WINDOW_HEIGHT,
@@ -111,8 +105,9 @@ int main()
   dp_bindVBO(&VBO1);
   dp_bindEBO(&EBO1);
 
-  dp_linkAttrib(&VBO1, 0, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)0);
-  dp_linkAttrib(&VBO1, 1, 3, GL_FLOAT, 6 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+  dp_linkAttrib(&VBO1, 0, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)0);
+  dp_linkAttrib(&VBO1, 1, 3, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(3 * sizeof(GLfloat)));
+  dp_linkAttrib(&VBO1, 2, 2, GL_FLOAT, 8 * sizeof(GLfloat), (void*)(6 * sizeof(GLfloat)));
 
   dp_unbindVAO();
   dp_unbindVBO();
@@ -146,6 +141,24 @@ int main()
 
   dp_updateFront(&mainCamera);
 
+  // Textures
+
+  int width;
+  int height;
+  char* data;
+  dp_image_loadFromPng("assets/Textures/grass.png", &data, &width, &height);
+
+  GLuint grassTexture;
+  glGenTextures(1, &grassTexture);
+  glBindTexture(GL_TEXTURE_2D, grassTexture);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+
+  free(data);
+
   // Main Loop
 
   while (!glfwWindowShouldClose(window))
@@ -159,6 +172,7 @@ int main()
     dp_updateMatrices(&mainCamera, &defaultShader);
 
     dp_bindVAO(&VAO1);
+    glBindTexture(GL_TEXTURE_2D, grassTexture);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(GLuint), GL_UNSIGNED_INT, NULL);
     glfwSwapBuffers(window);
   }
