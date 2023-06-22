@@ -5,6 +5,9 @@ cmake_minimum_required(VERSION 3.3)
 set(PROJECT_NAME "matura")
 set(OpenGL_GL_PREFERENCE LEGACY)
 
+# Options
+option(CGLM_USE_C99 "" OFF)
+
 # Project Name
 project(${PROJECT_NAME})
 
@@ -12,6 +15,7 @@ project(${PROJECT_NAME})
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(cglm REQUIRED)
 
 # Globs
 file(GLOB HEADERS_FILES src/Headers/*.h)
@@ -27,4 +31,4 @@ add_executable(
   ${UTILS_FILES}
 )
 target_include_directories(${PROJECT_NAME} PUBLIC src)
-target_link_libraries(${PROJECT_NAME} PUBLIC GL GLEW glfw)
+target_link_libraries(${PROJECT_NAME} PUBLIC GL GLEW glfw cglm m)
