@@ -72,7 +72,7 @@ void dp_deleteEBO(EBO* EBO)
   glDeleteBuffers(1, &EBO->ID);
 }
 
-void dp_initShader(Shader* Shader, const char* vertexSourcePath, const char* fragmentSourcePath)
+void dp_initShader(Shader* Shader, const char* vertexSource, const char* fragmentSource)
 {
   // Info Log
   int success;
@@ -82,8 +82,8 @@ void dp_initShader(Shader* Shader, const char* vertexSourcePath, const char* fra
   GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
   GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-  const char* vertexShaderSource = dp_file_getContents(vertexSourcePath);
-  const char* fragmentShaderSource = dp_file_getContents(fragmentSourcePath);
+  const char* vertexShaderSource = dp_file_getContents(vertexSource);
+  const char* fragmentShaderSource = dp_file_getContents(fragmentSource);
 
   glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
   glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);

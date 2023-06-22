@@ -4,8 +4,8 @@ const char* dp_file_getContents(const char* path)
 {
   FILE* file = fopen(path, "rb");
   if (file == NULL) {
-    fprintf(stderr, "Failed to read file %s!\n", path);
-    return NULL;
+      fprintf(stderr, "Failed to read file %s!\n", path);
+      return NULL;
   }
 
   fseek(file, 0, SEEK_END);
