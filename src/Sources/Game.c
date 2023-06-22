@@ -1,7 +1,10 @@
 #include "../Headers/Game.h"
 
-extern const float CAMERA_SPEED;
-extern vec3 position;
+extern const unsigned int WINDOW_WIDTH;
+extern const unsigned int WINDOW_HEIGHT;
+extern const float        CAMERA_SPEED;
+extern const float        CAMERA_SENSITIVITY;
+extern vec3               position;
 
 bool dp_initializeGlfw()
 {
@@ -29,11 +32,16 @@ bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const un
   glfwMakeContextCurrent(*window);
 
   // Clear Color
-  GLclampf red   = 0.0f;
-  GLclampf green = 0.3f;
-  GLclampf blue  = 0.3f;
+
+  GLclampf red   = 0.78f;
+  GLclampf green = 0.72f;
+  GLclampf blue  = 0.55f;
   GLclampf alpha = 1.0f;
   glClearColor(red, green, blue, alpha);
+
+  // Point Size
+
+  glPointSize(5.f);
 
   return true;
 }
@@ -77,6 +85,7 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
     return;
   }
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+  glfwSetCursorPos(window, (double)WINDOW_WIDTH / 2, (double)WINDOW_HEIGHT / 2);
 
   // Polygon Modes
 
@@ -92,8 +101,6 @@ void dp_handleInputs(GLFWwindow* window, float deltaTime, bool* cameraLocked)
   {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
-
-  // Movement
 
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
   {

@@ -17,6 +17,7 @@
 ## Controls
 
 - WASD: Movement
+- Mouse: Rotation
 - B - Vertex Mode
 - N - Line Mode
 - M - Fill Mode

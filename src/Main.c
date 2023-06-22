@@ -9,31 +9,32 @@
 
 // Constants
 
-const unsigned int WINDOW_WIDTH  = 800;
-const unsigned int WINDOW_HEIGHT = 600;
-const char*        WINDOW_TITLE  = "GLFW";
-const float        CAMERA_FOV    = 45.f;
-const float        CAMERA_NEAR   = 0.1f;
-const float        CAMERA_FAR    = 100.f;
-const float        CAMERA_SPEED  = 2.f;
+const unsigned int WINDOW_WIDTH       = 800;
+const unsigned int WINDOW_HEIGHT      = 600;
+const char*        WINDOW_TITLE       = "GLFW";
+const float        CAMERA_FOV         = 45.f;
+const float        CAMERA_NEAR        = 0.1f;
+const float        CAMERA_FAR         = 100.f;
+const float        CAMERA_SPEED       = 2.f;
+const float        CAMERA_SENSITIVITY = 100.f;
 
 // Vertices and Indices
 
 GLfloat vertices[] = {
-  -0.5f,  -0.5f,  0.5f,  1.f, 0.f, 0.f,
-   0.0f,  -0.5f,  0.5f,  0.f, 1.f, 0.f,
-   0.5f,  -0.5f,  0.5f,  0.f, 0.f, 1.f,
-  -0.5f,  -0.5f,  0.0f,  1.f, 1.f, 0.f,
-   0.0f,  -0.5f,  0.0f,  0.f, 1.f, 1.f,
-   0.5f,  -0.5f,  0.0f,  1.f, 0.f, 1.f,
-  -0.5f,  -0.5f, -0.5f,  1.f, 0.f, 0.f,
-   0.0f,  -0.5f, -0.5f,  0.f, 1.f, 0.f,
-   0.5f,  -0.5f, -0.5f,  0.f, 0.f, 1.f,
-  -0.25f,  0.0f,  0.25f, 1.f, 1.f, 0.f,
-   0.25f,  0.0f,  0.25f, 0.f, 1.f, 1.f,
-  -0.25f,  0.0f, -0.25f, 1.f, 0.f, 1.f,
-   0.25f,  0.0f, -0.25f, 1.f, 0.f, 0.f,
-   0.0f,   0.5f,  0.0f,  0.f, 1.f, 0.f,
+  -0.5f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
+   0.0f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
+   0.5f,  -0.5f,  0.5f,  0.2f, 0.2f, 0.2f,
+  -0.5f,  -0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
+   0.0f,  -0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
+   0.5f,  -0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
+  -0.5f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
+   0.0f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
+   0.5f,  -0.5f, -0.5f,  0.2f, 0.2f, 0.2f,
+  -0.25f,  0.0f,  0.25f, 0.2f, 0.2f, 0.2f,
+   0.25f,  0.0f,  0.25f, 0.2f, 0.2f, 0.2f,
+  -0.25f,  0.0f, -0.25f, 0.2f, 0.2f, 0.2f,
+   0.25f,  0.0f, -0.25f, 0.2f, 0.2f, 0.2f,
+   0.0f,   0.5f,  0.0f,  0.2f, 0.2f, 0.2f,
 };
 GLuint indices[] = {
   0, 1, 4,    // Front Left - BT
@@ -74,7 +75,7 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 // Position
 
-vec3 position = { 0.f, 0.f, -1.f };
+vec3 position = { 0.f, 0.f, 0.f };
 
 int main()
 {
@@ -121,12 +122,6 @@ int main()
   // Tests
 
   glEnable(GL_DEPTH_TEST);
-  
-  // Matrices
-
-  mat4 model;
-  mat4 view;
-  mat4 projection;
 
   // Delta Time
 
@@ -134,6 +129,18 @@ int main()
   float previousTime = 0.f;
 
   // Camera
+
+  vec3 cameraTarget = { 0.f, 0.f, 0.f };
+  vec3 cameraDirection = { 0.f, 0.f, 0.f };
+  vec3 up = { 0.f, 1.f, 0.f };
+  vec3 cameraRight;
+  vec3 cameraUp;
+
+  glm_vec3_sub(position, cameraTarget, cameraDirection);
+  glm_vec3_normalize(cameraDirection);
+  glm_vec3_cross(up, cameraDirection, cameraRight);
+  glm_vec3_normalize(cameraRight);
+  glm_vec3_cross(cameraDirection, cameraRight, cameraUp);
 
   bool cameraLocked = false;
 
@@ -151,11 +158,22 @@ int main()
     GLuint viewLoc = glGetUniformLocation(defaultShader.ID, "view");
     GLuint projectionLoc = glGetUniformLocation(defaultShader.ID, "projection");
 
+    // Matrices
+
+    mat4 model;
+    mat4 view;
+    mat4 projection;
+
     glm_mat4_identity(model);
     glm_mat4_identity(view);
     glm_mat4_identity(projection);
 
+    const float radius = 3.0f;
+    float camX = sin(glfwGetTime()) * radius;
+    float camZ = cos(glfwGetTime()) * radius;
+
     glm_perspective(glm_rad(CAMERA_FOV), (float)WINDOW_WIDTH / WINDOW_HEIGHT, CAMERA_NEAR, CAMERA_FAR, projection);
+    glm_lookat((vec3){ camX, 0.f, camZ }, (vec3){ 0.f, 0.f, 0.f}, up, view);
     glm_translate(model, position);
 
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*)model);
