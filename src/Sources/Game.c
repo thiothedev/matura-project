@@ -47,9 +47,9 @@ bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const un
 
   // Clear Color
 
-  GLclampf red   = 0.78f;
-  GLclampf green = 0.72f;
-  GLclampf blue  = 0.55f;
+  GLclampf red   = 0.2;
+  GLclampf green = 0.2;
+  GLclampf blue  = 0.2;
   GLclampf alpha = 1.0f;
   glClearColor(red, green, blue, alpha);
 

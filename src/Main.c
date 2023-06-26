@@ -24,14 +24,44 @@ const char*        WINDOW_TITLE  = "GLFW";
 // Vertices and Indices
 
 GLfloat vertices[] = {
-   0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Front
-   0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Front
-  -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Front
-  -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Front
+   0.5f,  0.5f,  0.5f, 1.f, 1.f, 1.f, 1.f, 1.f, // Front
+   0.5f, -0.5f,  0.5f, 1.f, 1.f, 1.f, 1.f, 0.f, // Front
+  -0.5f, -0.5f,  0.5f, 1.f, 1.f, 1.f, 0.f, 0.f, // Front
+  -0.5f,  0.5f,  0.5f, 1.f, 1.f, 1.f, 0.f, 1.f, // Front
+   0.5f,  0.5f, -0.5f, 1.f, 1.f, 1.f, 1.f, 1.f, // Right
+   0.5f, -0.5f, -0.5f, 1.f, 1.f, 1.f, 1.f, 0.f, // Right
+   0.5f, -0.5f,  0.5f, 1.f, 1.f, 1.f, 0.f, 0.f, // Right
+   0.5f,  0.5f,  0.5f, 1.f, 1.f, 1.f, 0.f, 1.f, // Right
+  -0.5f,  0.5f, -0.5f, 1.f, 1.f, 1.f, 1.f, 1.f, // Back
+  -0.5f, -0.5f, -0.5f, 1.f, 1.f, 1.f, 1.f, 0.f, // Back
+   0.5f, -0.5f, -0.5f, 1.f, 1.f, 1.f, 0.f, 0.f, // Back
+   0.5f,  0.5f, -0.5f, 1.f, 1.f, 1.f, 0.f, 1.f, // Back
+  -0.5f,  0.5f,  0.5f, 1.f, 1.f, 1.f, 1.f, 1.f, // Left
+  -0.5f, -0.5f,  0.5f, 1.f, 1.f, 1.f, 1.f, 0.f, // Left
+  -0.5f, -0.5f, -0.5f, 1.f, 1.f, 1.f, 0.f, 0.f, // Left
+  -0.5f,  0.5f, -0.5f, 1.f, 1.f, 1.f, 0.f, 1.f, // Left
+   0.5f,  0.5f, -0.5f, 1.f, 1.f, 1.f, 1.f, 1.f, // Top
+   0.5f,  0.5f,  0.5f, 1.f, 1.f, 1.f, 1.f, 0.f, // Top
+  -0.5f,  0.5f,  0.5f, 1.f, 1.f, 1.f, 0.f, 0.f, // Top
+  -0.5f,  0.5f, -0.5f, 1.f, 1.f, 1.f, 0.f, 1.f, // Top
+  -0.5f, -0.5f,  0.5f, 1.f, 1.f, 1.f, 1.f, 1.f, // Bottom
+  -0.5f, -0.5f, -0.5f, 1.f, 1.f, 1.f, 1.f, 0.f, // Bottom
+   0.5f, -0.5f, -0.5f, 1.f, 1.f, 1.f, 0.f, 0.f, // Bottom
+   0.5f, -0.5f,  0.5f, 1.f, 1.f, 1.f, 0.f, 1.f, // Bottom
 };
 GLuint indices[] = {
-  0, 1, 3, // Front
-  1, 2, 3, // Front
+  0, 1, 3,     // Front
+  1, 2, 3,     // Front
+  4, 5, 7,     // Right
+  5, 6, 7,     // Right
+  8, 9, 11,    // Back
+  9, 10, 11,   // Back
+  12, 13, 15,  // Left
+  13, 14, 15,  // Left
+  16, 17, 19,  // Top
+  17, 18, 19,  // Top
+  20, 21, 23,  // Bottom
+  21, 22, 23,  // Bottom
 };
 
 // Callbacks
@@ -70,7 +100,7 @@ int main()
   // VAO, VBO, and EBO
 
   VAO VAO1;
-  VBO VBO1;
+  VBO VBO1; 
   EBO EBO1;
 
   dp_initVAO(&VAO1);
@@ -120,7 +150,7 @@ int main()
   // Textures
   
   Texture grassTexture;
-  dp_initTexture(&grassTexture, "assets/Textures/test.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+  dp_initTexture(&grassTexture, "assets/Textures/swirl.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 
   // Main Loop
 
