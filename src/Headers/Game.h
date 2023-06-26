@@ -11,6 +11,13 @@
 #include "Camera.h"
 
 /**
+ * Prints information about the engine.
+ * This function displays relevant information about the engine, such as the version number,
+ * author, and any additional details deemed necessary.
+ */
+void dp_printEngineInfo();
+
+/**
  * Initializes GLFW library.
  *
  * @return True if GLFW initialization is successful, false otherwise.

@@ -22,6 +22,23 @@ const bool dp_image_loadFromPng(const char* path, char** data, int* width, int* 
     return false;
   }
 
+  size_t rowSize = PNG_IMAGE_ROW_STRIDE(image);
+  char* tempRow = (char*)malloc(rowSize);
+
+  for (int y = 0; y < image.height / 2; ++y)
+  {
+    char* row1 = *data + y * rowSize;
+    char* row2 = *data + (image.height - y - 1) * rowSize;
+
+    memcpy(tempRow, row1, rowSize);
+    memcpy(row1, row2, rowSize);
+    memcpy(row2, tempRow, rowSize);
+  }
+
+  free(tempRow);
+
   *width = image.width;
   *height = image.height;
+
+  return true;
 }

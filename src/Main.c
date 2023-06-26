@@ -12,51 +12,26 @@
 
 // Constants
 
-const unsigned int WINDOW_WIDTH       = 800;
-const unsigned int WINDOW_HEIGHT      = 600;
-const char*        WINDOW_TITLE       = "GLFW";
+const char* ENGINE_NAME    = "Dusky Peak";
+const char* ENGINE_VERSION = "0.1";
+const char* ENGINE_AUTHOR  = "Robin Patrik Sloup";
+const char* ENGINE_LICENSE = "GNU GPLv3";
+
+const unsigned int WINDOW_WIDTH  = 800;
+const unsigned int WINDOW_HEIGHT = 600;
+const char*        WINDOW_TITLE  = "GLFW";
 
 // Vertices and Indices
 
 GLfloat vertices[] = {
-  -0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
-   0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
-  -0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
-   0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
-   0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
-   0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
-   0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
-   0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
-   0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
-  -0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
-   0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
-  -0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
-  -0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
-  -0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
-  -0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
-  -0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
-  -0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
-   0.5f,  0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
-  -0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
-   0.5f,  0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
-   0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 0.f, 0.f,
-  -0.5f, -0.5f,  0.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
-   0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 1.f, 1.f,
-  -0.5f, -0.5f, -0.5f, 0.f, 0.f, 0.f, 0.f, 1.f,
+   0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Front
+   0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Front
+  -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // Front
+  -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Front
 };
 GLuint indices[] = {
-  0, 1, 3,     // Front
-  3, 2, 0,     // Front
-  4, 5, 7,     // Right
-  7, 6, 4,     // Right
-  8, 9, 11,    // Back
-  11, 10, 8,   // Back
-  12, 13, 15,  // Left
-  15, 14, 12,  // Left
-  16, 17, 19,  // Top
-  19, 18, 16,  // Top
-  20, 21, 23,  // Bottom
-  23, 22, 20,  // Bottom
+  0, 1, 3, // Front
+  1, 2, 3, // Front
 };
 
 // Callbacks
@@ -87,6 +62,7 @@ int main()
 
   // Initializing
 
+  dp_printEngineInfo();
   dp_initializeGlfw();
   dp_initializeWindow(&window, WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
   dp_initializeGlew();
@@ -144,7 +120,7 @@ int main()
   // Textures
   
   Texture grassTexture;
-  dp_initTexture(&grassTexture, "assets/Textures/grass.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+  dp_initTexture(&grassTexture, "assets/Textures/test.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 
   // Main Loop
 

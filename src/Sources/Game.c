@@ -1,16 +1,30 @@
 #include "../Headers/Game.h"
 
+extern const char* ENGINE_NAME;
+extern const char* ENGINE_VERSION;
+extern const char* ENGINE_AUTHOR;
+extern const char* ENGINE_LICENSE;
+
 extern const unsigned int WINDOW_WIDTH;
 extern const unsigned int WINDOW_HEIGHT;
 
 extern Camera mainCamera;
+
+void dp_printEngineInfo()
+{
+  printf("%s %s\n", ENGINE_NAME, ENGINE_VERSION);
+  printf("Created by %s\n", ENGINE_AUTHOR);
+  printf("Licensed under %s\n\n", ENGINE_LICENSE);
+}
 
 bool dp_initializeGlfw()
 {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  printf("GLFW: %s\n", glfwGetVersionString());
 }
 
 bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const unsigned int height, const char* title)
@@ -29,6 +43,7 @@ bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const un
     return false;
   }
   glfwMakeContextCurrent(*window);
+  printf("OpenGL: %s\n", glGetString(GL_VERSION));
 
   // Clear Color
 
@@ -40,7 +55,7 @@ bool dp_initializeWindow(GLFWwindow** window, const unsigned int width, const un
 
   // Point Size
 
-  glPointSize(5.f);
+  glPointSize(10.f);
 
   return true;
 }
